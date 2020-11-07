@@ -4,8 +4,9 @@ const canvas=document.createElement('canvas');
 const context=canvas.getContext('2d');
 const width=500;
 const height=700;
-const screenWidth=window.screen.width;
-const canvasPosition=screenWidth/2-width/2;
+const screenWidth = window.screen.width;
+const canvasPosition = screenWidth / 2 - width / 2;
+const gameOverElement=document.createElement('div');
 
 const paddleHeight=10;
 const paddleWidth=50;
@@ -22,7 +23,9 @@ const ballRadius=5;
 
 let playerScore=0;
 let computerScore=0;
-const winningScore=6;
+const winningScore=3;
+let gameOver=true;
+let newGame=true;
 
 let speedX;
 let speedY;
@@ -73,6 +76,58 @@ function ballReset(){
     ballX=width/2;
     speedY=-3;
     paddleContact=false;
+}
+
+//Vertical Speed and Horizontal Speed
+function ballMove(){
+    ballY += speedY;
+    if(playerMoved && paddleContact){ 
+        ballX += speedX;
+    }
+}
+
+//Computer Movement
+function computerAI(){
+    if(playerMoved){
+        if(paddleTopX+paddleDiff<ballX){
+            paddleTopX += computerSpeed;
+        }
+        else{
+            paddleTopX -= computerSpeed;
+        }
+    }
+}
+
+function showGameOver(winner){
+    canvas.hidden=true;
+    gameOverElement.textContent='';
+    gameOverElement.classList.add('game-over');
+    const title =document.createElement('h1');
+    title.textContent=`${winner} Wins!`;
+    const playAgainBtn=document.createElement('button');
+    playAgainBtn.setAttribute('onclick','startGame()');
+    playAgainBtn.textContent="Let's Play Again!";
+    gameOverElement.append(title,playAgainBtn);
+    body.appendChild('gameOverElement');
+}
+
+function gameOver(){
+    if(playerScore===winnerScore || computerScore===winnerScore){
+        gameOver=true;
+        const winner=playerScore===winningScore ? 'Player' : 'Computer';
+        showGameOver(winner);
+    }
+}
+
+function animate(){
+    renderCanvas();
+    ballMove();
+    ballBoundaries();
+    computerAI();
+    gameOver();
+    if(!gameOver){
+        window.requestAnimationFrame(animate);
+    }
 }
 
 function startGame(){
