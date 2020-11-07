@@ -24,14 +24,13 @@ const ballRadius=5;
 let playerScore=0;
 let computerScore=0;
 const winningScore=3;
-let gameOver=true;
+let isGameOver=true;
 let newGame=true;
 
 let speedX;
 let speedY;
 let trajectoryX;
 let computerSpeed;
-
 
 
 function renderCanvas(){
@@ -41,7 +40,7 @@ function renderCanvas(){
 
     //Paddle
     context.fillStyle='white';
-    context.fillRect(paddleBottomX, height -20, paddleWidth,paddleHeight);
+    context.fillRect(paddleBottomX, height-20, paddleWidth,paddleHeight);
     context.fillRect(paddleTopX,10,paddleWidth,paddleHeight);
 
     //Center line
@@ -113,7 +112,7 @@ function showGameOver(winner){
 
 function gameOver(){
     if(playerScore===winnerScore || computerScore===winnerScore){
-        gameOver=true;
+        isGameOver=true;
         const winner=playerScore===winningScore ? 'Player' : 'Computer';
         showGameOver(winner);
     }
@@ -125,7 +124,7 @@ function animate(){
     ballBoundaries();
     computerAI();
     gameOver();
-    if(!gameOver){
+    if(!isGameOver){
         window.requestAnimationFrame(animate);
     }
 }
@@ -135,7 +134,7 @@ function startGame(){
     computerScore=0;
     ballReset();
     createCanvas();
-    // animate();
+    animate();
     canvas.addEventListener('mousemove',(e)=>{
         console.log(e.clientX);
         playerMoved=true;
