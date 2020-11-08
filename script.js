@@ -26,7 +26,7 @@ const ballRadius=5;
 
 let playerScore=0;
 let computerScore=0;
-const winningScore=3;
+const winningScore=7;
 let isGameOver=true;
 let newGame=true;
 
